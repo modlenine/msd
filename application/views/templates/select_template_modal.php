@@ -822,6 +822,9 @@
 
 
         $('#btnSaveSelectTemplate_edit').click(function(){
+
+            $('#btnSaveSelectTemplate_edit').prop('disabled' , true);
+
             const oldtemplate = $('#select_check_templatename').val();
             const editfile = $('input:file[id="select_edit_template_image"]').val();
             const templatename = $('#select_edit_template_name').val();

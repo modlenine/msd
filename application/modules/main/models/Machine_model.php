@@ -851,13 +851,7 @@ class Machine_model extends CI_Model
 
 
 
-            
-
-            $this->db->where("mat_machine_name" , $oldtemplate);
-            $this->db->delete("machine_template");
-
-            $this->db->where("ted_template_name" , $oldtemplate);
-            $this->db->delete("msd_template_detail");
+        
 
 
 
@@ -987,6 +981,12 @@ class Machine_model extends CI_Model
 
             $this->db->where("ted_template_name",$templatename);
             $this->db->delete("msd_template_detail_temp");
+
+            $this->db->where("mat_machine_name" , $oldtemplate);
+            $this->db->delete("machine_template");
+
+            $this->db->where("ted_template_name" , $oldtemplate);
+            $this->db->delete("msd_template_detail");
 
             // History
             $templatenameHis = $oldtemplate;
