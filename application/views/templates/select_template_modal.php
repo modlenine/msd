@@ -231,7 +231,7 @@
 
 <!-- Modal Edit Run Template -->
 <div class="modal fade " id="edit_runscreen_selectTemplate_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <form id="frm_edit_runscreen_edit" autocomplete="off">
         <div class="modal-content editRSC">
             <div class="modal-header">
@@ -327,7 +327,7 @@
 
 <!-- Modal add bom template -->
 <div class="modal fade " id="addBomTemplate_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg upsizeLg modal-dialog-centered">
+    <div class="modal-dialog modal-lg upsizeLg modal-dialog-centered modal-dialog-scrollable">
         
         <div class="modal-content">
             <div class="modal-header">
@@ -387,7 +387,7 @@
 
 <!-- Modal เมนู BOM-->
 <div class="modal fade bgBomTemplate1" id="md_bom_template" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">คุณต้องการทำอะไร ?</h5>
@@ -521,7 +521,7 @@
 
 <!-- Modal ใส่วัตถุดิบลง Feeder  -->
 <div class="modal fade bg_addmatFeeder" id="md_addmatFeeder_template" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <!-- <h5 class="modal-title" id="exampleModalLabel">กรุณาเลือก Feeder สำหรับ <span id="textMatname"></span></h5> -->

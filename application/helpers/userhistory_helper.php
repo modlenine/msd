@@ -18,7 +18,7 @@ function uhis()
 //Setting Helper
 
 
-function saveHistory($templatename , $itemid = "" , $dataareaid = "" , $detail , $menu , $actionType , $ip)
+function saveHistory($templatename="" , $itemid = "" , $dataareaid = "" , $detail , $menu="" , $actionType="" , $ip="")
 {
     if($detail != ""){
         $arInsertHistory = array(

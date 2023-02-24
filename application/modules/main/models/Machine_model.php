@@ -994,6 +994,7 @@ class Machine_model extends CI_Model
             $detail = "แก้ไข Template สำเร็จ Template เดิม : $templatenameHis ";
             $actionType = "edit data";
             $ip = $this->input->ip_address();
+            $menu = "Edit Template";
             saveHistory($templatenameHis , $itemidHis , $dataareaid  , $detail , $menu , $actionType , $ip);
 
             
