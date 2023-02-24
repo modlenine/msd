@@ -27,6 +27,11 @@ let sessionEcode = $("#checkSessionEcode").val();
       }else{
         $("#m_list").css("display", "none");
       }
+
+      if(sessionEcode == "M0089" || sessionEcode == "M1832"){
+        //สิทธิ์พี่ทีป
+        $("#m_list").css("display", "");
+      }
     }
   }else if($("#checkDeptCode").val() == "1002"){
     console.log("คุณคือพนักงานไอที");

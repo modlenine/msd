@@ -22,7 +22,7 @@ class Machine extends MX_Controller
         );
 
         //Check Permission page
-        if(getUser()->ecode == "M1413" || getUser()->ecode == "M2067"){
+        if(getUser()->ecode == "M1413" || getUser()->ecode == "M2067" || getUser()->ecode == "M0089" || getUser()->ecode == "M1832"){
             getHead();
             getContent("machine/index", $data);
             getFooter();

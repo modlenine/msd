@@ -21,7 +21,7 @@
             </div> -->
 
             <div class="col-md-6">
-                <button class="button button-desc button-3d button-rounded button-green center" data-toggle="modal" data-target="#runscreen_md" style="width:100%">จัดการ Run Screen</button>
+                <button id="manage_runscreen_btn" class="button button-desc button-3d button-rounded button-green center" data-toggle="modal" data-target="#runscreen_md" style="width:100%">จัดการ Run Screen</button>
             </div>
 
 
