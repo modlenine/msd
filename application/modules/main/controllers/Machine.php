@@ -546,6 +546,16 @@ public function run_updateData()
         $this->machine->checkUseTemplate();
     }
 
+    public function getInlet_template()
+    {
+        $this->machine->getInlet_template();
+    }
+
+    public function saveInlet_template()
+    {
+        $this->machine->saveInlet_template();
+    }
+
 
 
 

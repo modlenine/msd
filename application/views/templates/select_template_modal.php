@@ -351,6 +351,9 @@
                     <div class="col-md-12 col-xl-6">
                         <h5><u>Feeder</u></h5>
                         <!-- Load Feeder temp -->
+                        <button class="btn btn-warning editInlet_template">
+                            <i class="icon-line-edit intletI"></i> Inlet
+                        </button>
                         <div id="loadFeederTemp_bom"></div>
                     </div>
                     <div class="col-md-12 col-xl-6">
@@ -573,6 +576,41 @@
     </div>
 </div>
 <!-- Modal ใส่วัตถุดิบลง Feeder -->
+
+
+
+<!-- Modal Inlet -->
+<div class="modal fade bg_addmatFeeder" id="inlet_template_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><span id="inlet_template_title"></span></h5><br>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="saveInlet_template_frm" autocomplete="off">
+                    <!-- Check zone -->
+                    <input hidden type="text" name="templatename_inlet" id="templatename_inlet">
+                    <input hidden type="text" name="itemid_inlet" id="itemid_inlet">
+                    <input hidden type="text" name="dataareaid_inlet" id="dataareaid_inlet">
+
+                    <div id="inlet_template_show" class="row form-group"></div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" id="btn-saveInlet_template" name="btn-saveInlet_template" class="btn btn-info">บันทึก</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal Inlet -->
 
 
 
@@ -883,6 +921,10 @@
         });
 
         $(document).on('click' , '.btnBomTemplteClick' , function(){
+            const templatename = $(this).attr('templatename');
+            const itemid = $(this).attr('itemid');
+            const dataareaid = $(this).attr('dataareaid');
+
             if($('#select_template_dataareaid').val() == ""){
                 swal({
                     type: 'warning',
@@ -896,6 +938,12 @@
                 // copyFeederForBomTemplate();
                 //get Bom version for select
                 get_bomversionData();
+
+                $('.editInlet_template').attr({
+                    'templatename':templatename,
+                    'itemid':itemid,
+                    'dataareaid':dataareaid
+                });
             }
         });
         $(document).on('click' , '.btnBomTemplteEdit' , function(){
@@ -996,6 +1044,16 @@
                             $('#feeder_bom_section').css('display' , '');
                             $('.confirm-btn-section').css('display' , 'none');
 
+                            $('.editInlet_template').attr({
+                                'templatename':templatename,
+                                'itemid':itemid,
+                                'dataareaid':dataareaid
+                            });
+
+                            $('#templatename_inlet').val(templatename);
+                            $('#itemid_inlet').val(itemid);
+                            $('#dataareaid_inlet').val(dataareaid);
+
                             $('#bom_version_select').html(rsBomVersion);
                             $('#loadFeederTemp_bom').html(rsFeeder);
                             $('#loadGetBom_template').html(rsBom);
@@ -1045,6 +1103,10 @@
                             let resultBom = JSON.parse(data).bomResult;
                             $('#loadFeederTemp_bom').html(resultFeeder);
                             $('#loadGetBom_template').html(resultBom);
+
+                            $('#templatename_inlet').val(templatename);
+                            $('#itemid_inlet').val(template_itemid);
+                            $('#dataareaid_inlet').val(template_dataareaid);
                         }
 
                     }
@@ -1958,6 +2020,122 @@
 
 
 
+        $(document).on('click' , '.editInlet_template' , function(){
+            const templatename = $(this).attr('templatename');
+            const itemid = $(this).attr('itemid');
+            const dataareaid = $(this).attr('dataareaid');
+            if(templatename != "" && itemid != "" && dataareaid != ""){
+                getInlet_template(templatename , itemid , dataareaid);
+            }
+        });
+        function getInlet_template(templatename , itemid , dataareaid)
+        {
+            if(templatename != "" && itemid != "" && dataareaid != ""){
+                $.ajax({
+                    url:"/intsys/msd/main/machine/getInlet_template",
+                    method:"POST",
+                    data:{
+                        templatename:templatename,
+                        itemid:itemid,
+                        dataareaid:dataareaid
+                    },
+                    beforeSend:function(){},
+                    success:function(data){
+                        let res = JSON.parse(data);
+                        console.log(res);
+
+                        if(res.status == "Select Data Success"){
+                            let inletData = res.inletData;
+                            let inletTitle = '';
+                            let inletName = '';
+                            $('#inlet_template_modal').modal('show');
+
+                            let output = '';
+                            let option = "";
+                            let inletFeederid = "";
+
+                            for(let i = 0; i < inletData.length; i++){
+                                
+                                inletName = inletData[i].faf_feedername;
+                                inletFeederid = inletData[i].faf_autoid;
+
+                                if(inletData[i].faf_inlet === null || inletData[i].faf_inlet == "0"){
+                                    option = `
+                                        <option selected value="N/A">N/A</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    `;
+                                }else if(inletData[i].faf_inlet == "1"){
+                                    option = `
+                                        <option value="N/A">N/A</option>
+                                        <option selected value="`+inletData[i].faf_inlet+`">`+inletData[i].faf_inlet+`</option>
+                                        <option value="2">2</option>
+                                    `;
+                                }else if(inletData[i].faf_inlet == "2"){
+                                    option = `
+                                        <option value="N/A">N/A</option>
+                                        <option value="1">1</option>
+                                        <option selected value="`+inletData[i].faf_inlet+`">`+inletData[i].faf_inlet+`</option>
+                                    `;
+                                }
+
+                                
+
+
+                                output +=`
+                                    <div class="col-md-6 form-group">
+                                        <label>`+inletName+`</label>
+                                        <input hidden type="text" id="ip-inletFeederID" name="ip-inletFeederID[]" value="`+inletFeederid+`">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <select id="ip-inletValue" name="ip-inletValue[]" class="form-control form-group ip-inletValue">
+                                            `+option+`
+                                        </select>
+                                    </div>
+                                `;
+                            }
+
+                            $('#inlet_template_show').html(output);
+                            $('#inlet_template_title').html('บันทึก Inlet');
+                        }
+
+                    },
+
+                })
+            }
+        }
+
+        $('#btn-saveInlet_template').click(function(){
+            saveInlet_template();
+        });
+        function saveInlet_template()
+        {
+            $.ajax({
+                url:"/intsys/msd/main/machine/saveInlet_template",
+                method:"POST",
+                data:$('#saveInlet_template_frm').serialize(),
+                beforeSend:function(){},
+                success:function(data){
+                    let res = JSON.parse(data);
+                    console.log(res);
+                    if(res.status == "Update Data Success"){
+                        let dataFeederTmp = res.dataFeederTmp;
+                        swal({
+                            title: 'อัพเดต Inlet สำเร็จ',
+                            showConfirmButton: false,
+                            type: 'success',
+                            timer: 1500
+                        }).then(function(){
+                            $('#loadFeederTemp_bom').html(dataFeederTmp);
+                            $('#inlet_template_modal').modal('hide');
+                        });
+                    }
+                }
+            });
+        }
+
+
+
 
 
 
@@ -1968,6 +2146,8 @@
     //////////////////////////////////////End Ready Function
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     function getBomTemplate(templatename , itemid , dataareaid , bomid)
     {
@@ -2016,7 +2196,10 @@
             });
         }else{
             $('.btnBomTemplteClick').css('display' , '');
-            $('.btnBomTemplteEdit').css('display' , 'none')
+            $('.btnBomTemplteEdit').css('display' , 'none');
+            $('#showFeederTemplate').html('');
+            $('#showBomTemplate').html('');
+            $('#showBomMixTemplate').html('');
         }
 
     }
@@ -2110,6 +2293,12 @@
                 loadTemplateOtherImage(templatename);
 
                 loadRunscreenFromTemplate(templatename);
+
+                $('.btnBomTemplteClick').attr({
+                    'templatename':templatename,
+                    'itemid':template_itemuse,
+                    'dataareaid':dataareaid
+                });
                 
             }
         });

@@ -640,7 +640,8 @@ class Machine_model extends CI_Model
             faf_bomid,
             faf_feedername,
             faf_rawmaterial,
-            faf_value
+            faf_value,
+            faf_inlet
             FROM msd_template_feeder
             WHERE faf_templatename = '$templatenameOld' AND faf_dataareaid = '$dataareaidOld' AND faf_itemid = '$itemidOld'
             ORDER BY faf_autoid ASC
@@ -662,6 +663,7 @@ class Machine_model extends CI_Model
                     "faf_feedername" => $rs->faf_feedername,
                     "faf_rawmaterial" => $rs->faf_rawmaterial,
                     "faf_value" => $rs->faf_value,
+                    "faf_inlet" => $rs->faf_inlet,
                     "faf_userpost" => getUser()->Fname." ".getUser()->Lname,
                     "faf_ecodepost" => getUser()->ecode,
                     "faf_deptcodepost" => getUser()->DeptCode,
@@ -3642,7 +3644,7 @@ public function updateData()
             msd_template_feeder_temp.faf_feedername,
             msd_template_feeder_temp.faf_rawmaterial,
             msd_template_feeder_temp.faf_value,
-            msd_template_feeder_temp.faf_status,
+            msd_template_feeder_temp.faf_inlet,
             msd_template_feeder_temp.faf_userpost,
             msd_template_feeder_temp.faf_ecodepost,
             msd_template_feeder_temp.faf_deptcodepost,
@@ -3690,7 +3692,7 @@ public function updateData()
                     <tr>
                         <td>'.$rs->faf_feedername.'</td>
                         <td>'.$rs->faf_rawmaterial.'</td>
-                        <td></td>
+                        <td>'.$rs->faf_inlet.'</td>
                         <td>'.$rs->faf_value.'</td>
                         <td>'.$iconFeedDel.'</td>
                     </tr>
@@ -3936,7 +3938,7 @@ public function updateData()
             msd_template_feeder_temp.faf_feedername,
             msd_template_feeder_temp.faf_rawmaterial,
             msd_template_feeder_temp.faf_value,
-            msd_template_feeder_temp.faf_status,
+            msd_template_feeder_temp.faf_inlet,
             msd_template_feeder_temp.faf_userpost,
             msd_template_feeder_temp.faf_ecodepost,
             msd_template_feeder_temp.faf_deptcodepost,
@@ -3983,11 +3985,15 @@ public function updateData()
                         data_bomid="'.$rs->faf_bomid.'"
                     ></i>';
 
+                    if($rs->faf_inlet == 0){
+                        $rs->faf_inlet = "N/A";
+                    }
+
                     $output .='
                     <tr>
                         <td>'.$rs->faf_feedername.'</td>
                         <td>'.$rs->faf_rawmaterial.'</td>
-                        <td></td>
+                        <td>'.$rs->faf_inlet.'</td>
                         <td>'.$rs->faf_value.'</td>
                         <td>'.$iconFeedDel.'</td>
                     </tr>
@@ -4734,6 +4740,7 @@ public function updateData()
     public function saveDataTempToTable_edit()
     {
         if($this->input->post("templatename") != "" && $this->input->post("itemid") != "" && $this->input->post("bomid") != "" && $this->input->post("dataareaid")){
+
             $templatename = $this->input->post("templatename");
             $itemid = $this->input->post("itemid");
             $bomid = $this->input->post("bomid");
@@ -4859,11 +4866,15 @@ public function updateData()
                 ';
                 foreach($queryFeeder->result() as $rs){
 
+                    if($rs->faf_inlet == 0){
+                        $rs->faf_inlet = "N/A";
+                    }
+
                     $output .='
                     <tr>
                         <td>'.$rs->faf_feedername.'</td>
                         <td>'.$rs->faf_rawmaterial.'</td>
-                        <td></td>
+                        <td>'.$rs->faf_inlet.'</td>
                         <td>'.$rs->faf_value.'</td>
                     </tr>
                     ';
@@ -5029,7 +5040,8 @@ public function updateData()
             faf_itemid,
             faf_feedername,
             faf_rawmaterial,
-            faf_value
+            faf_value,
+            faf_inlet
             FROM msd_template_feeder
             WHERE faf_templatename = '$templatename' AND faf_itemid = '$itemid' AND faf_dataareaid = '$dataareaid' ORDER BY faf_autoid ASC
             ");
@@ -5136,19 +5148,22 @@ public function updateData()
                         <tbody>
                 ';
                 foreach($queryFeeder->result() as $rs){
-                    $getInlet = $this->db->query("SELECT
-                    msd_inlet.inlet_feeder_id,
-                    msd_inlet.inlet_value,
-                    farrel_feeder.faf_feedername
-                    FROM
-                    msd_inlet
-                    INNER JOIN farrel_feeder ON farrel_feeder.faf_autoid = msd_inlet.inlet_feeder_id
-                    where msd_inlet.inlet_mainformno = '$mainformno' AND faf_feedername = '$rs->faf_feedername' ");
+                    // $getInlet = $this->db->query("SELECT
+                    // msd_inlet.inlet_feeder_id,
+                    // msd_inlet.inlet_value,
+                    // farrel_feeder.faf_feedername
+                    // FROM
+                    // msd_inlet
+                    // INNER JOIN farrel_feeder ON farrel_feeder.faf_autoid = msd_inlet.inlet_feeder_id
+                    // where msd_inlet.inlet_mainformno = '$mainformno' AND faf_feedername = '$rs->faf_feedername' ");
+                    if($rs->faf_inlet == "0" || $rs->faf_inlet === null){
+                        $rs->faf_inlet = "N/A";
+                    }
                     $output .='
                     <tr>
                         <td>'.$rs->faf_feedername.'</td>
                         <td>'.$rs->faf_rawmaterial.'</td>
-                        <td>'.$getInlet->row()->inlet_value.'</td>
+                        <td>'.$rs->faf_inlet.'</td>
                         <td>'.$rs->faf_value.'</td>
                     </tr>
                     ';
@@ -5318,7 +5333,8 @@ public function updateData()
             faf_itemid,
             faf_feedername,
             faf_rawmaterial,
-            faf_value
+            faf_value,
+            faf_inlet
             FROM msd_template_feeder_trans
             WHERE faf_templatename = '$templatename' AND faf_itemid = '$itemid' AND faf_dataareaid = '$dataareaid' AND faf_formno = '$mainformno' ORDER BY faf_autoid ASC
             ");
@@ -5455,7 +5471,8 @@ public function updateData()
             msd_template_feeder.faf_itemid,
             msd_template_feeder.faf_feedername,
             msd_template_feeder.faf_rawmaterial,
-            msd_template_feeder.faf_value
+            msd_template_feeder.faf_value,
+            msd_template_feeder.faf_inlet
             FROM
             msd_template_feeder
             WHERE faf_templatename = '$templatename' AND faf_itemid = '$itemid' AND faf_dataareaid = '$dataareaid' ORDER BY faf_autoid ASC
@@ -5472,6 +5489,7 @@ public function updateData()
                     "faf_feedername" => $rs->faf_feedername,
                     "faf_rawmaterial" => $rs->faf_rawmaterial,
                     "faf_value" => $rs->faf_value,
+                    "faf_inlet" => $rs->faf_inlet,
                     "faf_userpost" => getUser()->Fname." ".getUser()->Lname,
                     "faf_ecodepost" => getUser()->ecode,
                     "faf_deptcodepost" => getUser()->DeptCode,
@@ -5579,6 +5597,76 @@ public function updateData()
             $output = array(
                 "msg" => "ไม่พบข้อมูลที่คุณต้องการ",
                 "status" => "Error"
+            );
+        }
+
+        echo json_encode($output);
+    }
+
+
+    public function getInlet_template()
+    {
+        if($this->input->post("templatename") && $this->input->post("itemid") != "" && $this->input->post("dataareaid") != ""){
+
+            $templatename = $this->input->post("templatename");
+            $itemid = $this->input->post("itemid");
+            $dataareaid = $this->input->post("dataareaid");
+
+            $sql = $this->db->query("SELECT
+            faf_feedername,
+            faf_autoid,
+            faf_inlet
+            FROM
+            msd_template_feeder_temp
+            WHERE faf_templatename = '$templatename' AND faf_itemid = '$itemid' AND faf_dataareaid = '$dataareaid' ORDER BY faf_autoid ASC
+            ");
+            if($sql->num_rows() != 0){
+                $output = array(
+                    "msg" => "ดึงข้อมูล Inlet เรียบร้อยแล้ว",
+                    "status" => "Select Data Success",
+                    "inletData" => $sql->result(),
+                    "inletType" => "Update"
+                );
+            }else{
+
+                $output = array(
+                    "msg" => "ดึงข้อมูล Inlet ไม่สำเร็จ",
+                    "status" => "Select Data Not Success",
+                );
+            }
+
+            echo json_encode($output);
+        }
+    }
+
+    public function saveInlet_template()
+    {
+        if($this->input->post("ip-inletValue") != ""){
+            $feederid = $this->input->post("ip-inletFeederID");
+            $templatename = $this->input->post("templatename_inlet");
+            $itemid = $this->input->post("itemid_inlet");
+            $dataareaid = $this->input->post("dataareaid_inlet");
+
+            foreach($feederid as $key => $value){
+                $arupdateData = array(
+                    "faf_inlet" => $this->input->post("ip-inletValue")[$key]
+                );
+                $this->db->where("faf_autoid" , $value);
+                $this->db->update("msd_template_feeder_temp" , $arupdateData);
+            }
+
+            // Getdata Feeder tmp
+            $dataFeederTmp = $this->getFeederTemplate_tmp($templatename , $dataareaid , $itemid);
+
+            $output = array(
+                "msg" => "อัพเดตข้อมูล Inlet สำเร็จ",
+                "status" => "Update Data Success",
+                "dataFeederTmp" => $dataFeederTmp
+            );
+        }else{
+            $output = array(
+                "msg" => "อัพเดตข้อมูล Inlet ไม่สำเร็จ",
+                "status" => "Update Data Not Success"
             );
         }
 

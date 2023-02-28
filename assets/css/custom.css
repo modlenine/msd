@@ -1227,6 +1227,20 @@ table>#runscreenManage, td, th {
 	cursor: pointer;
 }
 
+.editInlet_template{
+	font-size:12px;
+	position:absolute;
+	top:2px;
+	right:2px;
+	color:#130e01;
+	transition:transform .2s;
+}
+
+.editInlet_template:hover{
+	transform:scale(1.1);
+	cursor: pointer;
+}
+
 .intletI{
 	font-size:14px;
 	font-weight: 600;
