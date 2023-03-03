@@ -2187,7 +2187,7 @@ $(document).on('click' , '.btnCloseNewRun' , function(){
                       $('#checkEditStatus').val('');
                 
                       // Code Check Permission Edit , Delete Button
-                      if($('#checkSessionEcode').val() == "M1809" || $('#checkSessionEcode').val() == "M1413" || $('#checkSessionEcode').val() == "M0089" || $('#checkSessionEcode').val() == "M2117" || $('#checkSessionEcode').val() == "M2067"){
+                      if($('#checkSessionEcode').val() == "M1809" || $('#checkSessionEcode').val() == "M1413" || $('#checkSessionEcode').val() == "M0089" || $('#checkSessionEcode').val() == "M2117" || $('#checkSessionEcode').val() == "M2067" || $('checkSessionEcode').val() == "M1832"){
                         $('#btnSelectTemplate_edit , #btnSelectTemplate_delete').css('display' , '');
                       }else{
                         $('#btnSelectTemplate_edit , #btnSelectTemplate_delete').css('display' , 'none');
@@ -2213,7 +2213,7 @@ $(document).on('click' , '.btnCloseNewRun' , function(){
               $('#checkEditStatus').val('');
         
               // Code Check Permission Edit , Delete Button
-              if($('#checkSessionEcode').val() == "M1809" || $('#checkSessionEcode').val() == "M1413" || $('#checkSessionEcode').val() == "M0089" || $('#checkSessionEcode').val() == "M2117" || $('#checkSessionEcode').val() == "M2067"){
+              if($('#checkSessionEcode').val() == "M1809" || $('#checkSessionEcode').val() == "M1413" || $('#checkSessionEcode').val() == "M0089" || $('#checkSessionEcode').val() == "M2117" || $('#checkSessionEcode').val() == "M2067" || $('#checkSessionEcode').val() == "M1832"){
                 $('#btnSelectTemplate_edit , #btnSelectTemplate_delete').css('display' , '');
               }else{
                 $('#btnSelectTemplate_edit , #btnSelectTemplate_delete').css('display' , 'none');
