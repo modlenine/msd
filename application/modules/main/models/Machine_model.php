@@ -4047,6 +4047,8 @@ public function updateData()
             WHERE b_templatename = '$templatename' And b_dataareaid = '$dataareaid' AND b_bomstatus != 'inactive' AND b_bomid = '$bomid' AND b_itemid = '$itemid'
             ");
 
+            $output_bom ='';
+
             if($sql_bom->num_rows() != 0){
                 $output_bom = '<div class="list-group">';
                 foreach($sql_bom->result() as $rs){
@@ -4115,7 +4117,7 @@ public function updateData()
                 }
                 $output_bom .='</div>';
             }else{
-                $output_bom .='พบข้อผิดพลาด';
+                $output_bom .='รายการถูก Mix ทั้งหมด';
             }
 
 
