@@ -91,6 +91,12 @@ let sessionEcode = $("#checkSessionEcode").val();
     // Validate input element
     if ($("#fam_dataareaid").val() == "") {
       $("#fam_dataareaid").addClass("inputNullNew");
+      swal({
+        type: 'warning',
+        title: 'กรุณาเลือกบริษัท',
+        showConfirmButton: false,
+        timer: 2000
+      });
     } else {
       $("#fam_dataareaid").removeClass("inputNullNew");
     }
@@ -116,6 +122,12 @@ let sessionEcode = $("#checkSessionEcode").val();
     if ($("#fam_machinename").val() == "") {
       $("#fam_machinename , #machineSearch , .chooseTemplateUl").addClass("inputNullNew");
       // alert('กรุณาคลิกเลือกเครื่องจักรด้วยค่ะ');
+      swal({
+        type: 'warning',
+        title: 'กรุณาเลือก STD',
+        showConfirmButton: false,
+        timer: 2000
+      });
     } else {
       $("#fam_machinename , #machineSearch , .chooseTemplateUl").removeClass("inputNullNew");
     }
@@ -151,9 +163,9 @@ let sessionEcode = $("#checkSessionEcode").val();
 
 
     $("#fam_prodid").keyup(function () {
-      if ($(this).val() == "") {
-        $("#fam_productcode , #fam_batchnumber").val("");
-      }
+      
+        $("#fam_productcode , #fam_batchnumber , #fam_machinename").val("");
+      
     });
 
 
@@ -162,6 +174,33 @@ let sessionEcode = $("#checkSessionEcode").val();
     }else{
       $("#fam_machine").removeClass("inputNullNew");
     }
+
+    if($('#machineSearch').val() == ""){
+      swal({
+        type: 'warning',
+        title: 'กรุณาเลือก STD',
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }else if($('#fam_productcode').val() == ""){
+      swal({
+        type: 'warning',
+        title: 'กรุณาเลือก PD',
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }else if($('#fam_batchnumber').val() == ""){
+      swal({
+        type: 'warning',
+        title: 'กรุณาเลือก PD',
+        showConfirmButton: false,
+        timer: 2000
+      });
+    }
+
+    
+
+    
 
 
     //////////////////////////
@@ -1828,9 +1867,11 @@ let sessionEcode = $("#checkSessionEcode").val();
   if ($("#checkpage").val() == "") {
     $("#fam_prodid").keyup(function () {
       if ($(this).val() != "") {
+        $("#fam_productcode , #fam_batchnumber , #machineSearch , #fam_machine , #fam_machinename").val("");
         let dataareaid = $("#fam_dataareaid :selected").val();
         let searchProdid = $(this).val();
         loadProdId(dataareaid, searchProdid);
+        
       } else {
         $("#showProdId").html("");
       }
