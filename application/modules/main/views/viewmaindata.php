@@ -309,7 +309,9 @@
                         <div class="col-lg-1"></div>
                     </div>
 
-                        <div id="showCheckGraph" class="row mt-5"></div>
+                    <div id="qcsticker" class="row mt-5"></div>
+
+                    <div id="showCheckGraph" class="row mt-5"></div>
 
                     <!-- <div class="row mt-4">
                         <div class="col-lg-12">
@@ -381,6 +383,16 @@
         $('#tabpage3').click(function(){
             const id = $(this).attr("href").substr(1);
             window.location.hash = id;
+
+            if(window.location.hash == "#page3"){
+                let prodid = $('#checkDataProductNumber').val();
+                let dataareaid = $('#checkDataAreaid').val();
+                let status = $("#checkStartPage2").val();
+                let formno = "<?php echo $mainformno; ?>";
+                let batchnumber = $('#checkDataBatchNumber').val();
+                loaddataSticker(formno , prodid , batchnumber , dataareaid , status);
+            }
+
         });
         $('#tabpage4').click(function(){
             const id = $(this).attr("href").substr(1);
@@ -1238,6 +1250,15 @@
         }
     }
 
+    if(window.location.hash == "#page3"){
+        let prodid = $('#checkDataProductNumber').val();
+        let dataareaid = $('#checkDataAreaid').val();
+        let status = $("#checkStartPage2").val();
+        let formno = "<?php echo $mainformno; ?>";
+        let batchnumber = $('#checkDataBatchNumber').val();
+        loaddataSticker(formno , prodid , batchnumber , dataareaid , status);
+    }
+
 
     if(window.location.hash == "#page4"){
         let prodid = $('#checkDataProductNumber').val();
@@ -1387,6 +1408,41 @@
 
             })
         }
+    }
+
+    function loaddataSticker(formno , prodid , batchnumber , dataareaid , status)
+    {
+        if(formno != "" && prodid != "" && batchnumber != "" && dataareaid != "" && status != ""){
+            // convert status 
+            if(status == "Start"){
+                status = 0;
+            }else if(status == "Stop"){
+                status = 1;
+            }
+
+            let output =`
+                <div class="col-md-12">
+                    <div class="container-iframe">
+
+                    <iframe class="" width="100%" height="500px" frameBorder="0" src=" https://intranet.saleecolour.com/intsys/lab_matching/qc/sample/`+formno+`/`+prodid+`/`+batchnumber+`/`+dataareaid+`/2-3-4/`+status+`"></iframe>
+                            
+                    </div>
+                </div>
+                `;
+                $('#qcsticker').html(output);
+
+
+
+
+  
+            // console.log("https://intranet.saleecolour.com/intsys/production_plan/machine/jobcard/"+prodid+"/"+dataareaid+"/2-3-4/0/"+status+"/"+formno+"/");
+        }
+
+            console.log(prodid);
+            console.log(dataareaid);
+            console.log(status);
+            console.log(formno);
+            console.log(batchnumber);
     }
 
 
