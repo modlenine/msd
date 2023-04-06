@@ -392,7 +392,6 @@
                 let batchnumber = $('#checkDataBatchNumber').val();
                 loaddataSticker(formno , prodid , batchnumber , dataareaid , status);
             }
-
         });
         $('#tabpage4').click(function(){
             const id = $(this).attr("href").substr(1);
