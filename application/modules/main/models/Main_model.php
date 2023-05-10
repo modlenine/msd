@@ -3685,17 +3685,21 @@ class Main_model extends CI_Model
                         $rsStandardValue = "";
                         $rsLowerLimit = "";
                         $rsUpperLimit = "";
-                        if(
-                            $rs->StandardValue == 0.000 || 
-                            $rs->LowerLimit == 0.000 || 
-                            $rs->UpperLimit == 0.000
-                        ){
+                        if(floatval($rs->StandardValue) <= 0.0000){
                             $rsStandardValue = "";
-                            $rsLowerLimit = "";
-                            $rsUpperLimit = "";
                         }else{
                             $rsStandardValue = $rs->StandardValue;
+                        }
+
+                        if(floatval($rs->LowerLimit) <= 0.0000){
+                            $rsLowerLimit = "";
+                        }else{
                             $rsLowerLimit = $rs->LowerLimit;
+                        }
+
+                        if(floatval($rs->UpperLimit) <= 0.0000){
+                            $rsUpperLimit = "";
+                        }else{
                             $rsUpperLimit = $rs->UpperLimit;
                         }
 
