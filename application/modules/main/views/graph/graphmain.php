@@ -488,7 +488,6 @@
 
                 }else{
                     loadCheckGraphByCheckLotNum();
-
                 }
             }
         });

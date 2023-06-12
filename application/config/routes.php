@@ -72,3 +72,4 @@ $route['setting_main.html'] = 'main/setting';
 
 // Graph Page
 $route['dashboard.html']= 'main/graph/graphPage';
+$route['graphRunscreen.html']= 'main/graph/graphRunscreenPage';

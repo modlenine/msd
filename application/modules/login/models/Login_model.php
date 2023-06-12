@@ -16,7 +16,14 @@ class Login_model extends CI_Model
 
     private function escape_string()
     {
-        return mysqli_connect("localhost", "ant", "Ant1234", "saleecolour");
+        if($_SERVER['HTTP_HOST'] == "localhost"){
+            $mysqlServer = "192.168.20.22";
+            return mysqli_connect("192.168.20.22", "ant", "Ant1234", "saleecolour");
+        }else{
+            $mysqlServer = "localhost";
+            return mysqli_connect("localhost", "ant", "Ant1234", "saleecolour");
+        }
+
     }
 
 

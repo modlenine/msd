@@ -53,6 +53,11 @@ class Graph extends MX_Controller {
         $this->graph->loadItemLot();
     }
 
+    public function loadItemLot_runscreen()
+    {
+        $this->graph->loadItemLot_runscreen();
+    }
+
 
     public function loadGraphDataByCheckLot()
     {
@@ -91,6 +96,47 @@ class Graph extends MX_Controller {
     public function loadItemidAndLotNumber()
     {
         $this->graph->loadItemidAndLotNumber();
+    }
+
+    public function graphRunscreenPage()
+    {
+        $data = array(
+            "title" => "Graph Runscreen Page"
+        );
+        getHead();
+        getContent("graph/graphRunscreen" , $data);
+        getFooter();
+    }
+
+    public function loadItemid_run()
+    {
+        $this->graph->loadItemid_run();
+    }
+
+    public function getDataRunscreenForCheckGraph()
+    {
+        $this->graph->getDataRunscreenForCheckGraph();
+    }
+
+    public function saveFristDataGraphRunscreen()
+    {
+        $this->graph->saveFristDataGraphRunscreen();
+    }
+
+
+    public function updateRunscreenChecked()
+    {
+        $this->graph->updateRunscreenChecked();
+    }
+
+    public function getDataRunscreenGraphFromdatabase()
+    {
+        $this->graph->getDataRunscreenGraphFromdatabase();
+    }
+
+    public function loadAlldataForUseGraphRunscreen()
+    {
+        $this->graph->loadAlldataForUseGraphRunscreen();
     }
 
 

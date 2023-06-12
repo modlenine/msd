@@ -302,6 +302,30 @@ class Graph_model extends CI_Model {
         }
     }
 
+    public function loadItemid_run()
+    {
+        if($this->input->post("itemid") != ""){
+            $itemid = $this->input->post("itemid");
+
+            $sql = $this->db->query("SELECT fam_productcode FROM farrel_main 
+            WHERE fam_productcode LIKE '%$itemid%' 
+            GROUP BY fam_productcode 
+            ORDER BY fam_productcode ASC");
+
+            $output = array(
+                "msg" => "ดึงข้อมูล Itemid สำเร็จ",
+                "status" => "Select Data Success",
+                "result" => $sql->result()
+            );
+        }else{
+            $output = array(
+                "msg" => "ดึงข้อมูล Itemid ไม่สำเร็จ",
+                "status" => "Select Data Not Success",
+            );
+        }
+        echo json_encode($output);
+    }
+
 
 
 
@@ -349,6 +373,27 @@ class Graph_model extends CI_Model {
     }
 
 
+    public function loadItemLot_runscreen()
+    {
+        if($this->input->post("itemid") != ""){
+            $itemid = $this->input->post("itemid");
+            $sql = $this->db->query("SELECT 
+            fam_batchnumber , fam_formno FROM farrel_main 
+            WHERE fam_productcode LIKE '%$itemid%' GROUP BY fam_batchnumber ORDER BY fam_batchnumber DESC");
+
+            $output = array(
+                "msg" => "ดึงข้อมูล Batchnumber สำเร็จ",
+                "status" => "Select Data Success",
+                "result" => $sql->result()
+            );
+        }else{
+            $output = array(
+                "msg" => "ดึงข้อมูล Batchnumber ไม่สำเร็จ",
+                "status" => "Select Data Not Success",
+            );
+        }
+        echo json_encode($output);
+    }
 
 
     public function loadGraphDataByCheckLot()
@@ -774,6 +819,305 @@ class Graph_model extends CI_Model {
 
         echo json_encode($output);
     }
+
+
+    public function getDataRunscreenForCheckGraph()
+    {
+        if($this->input->post("itemid") != ""){
+            $itemid = $this->input->post("itemid");
+            $batchnumberarray = $this->input->post("batchnumberarray");
+
+            $resultMainformno = $this->getMainFormno($itemid , $batchnumberarray);
+            $resultRunscreenByMainFormno = $this->getRunscreenByMainformno($resultMainformno);
+
+            $output = array(
+                "msg" => "ดึงข้อมูล Runscreen By Mainformno สำเร็จ",
+                "status" => "Select Data Success",
+                "result" => $resultRunscreenByMainFormno,
+                "result_mainformno" => $resultMainformno,
+            );
+
+        }else{
+            $output = array(
+                "msg" => "ดึงข้อมูล Runscreen By Mainformno ไม่สำเร็จ",
+                "status" => "Select Data Not Success",
+            );
+        }
+        echo json_encode($output);
+    }
+    private function getMainFormno($itemid , $batchnumberarray)
+    {
+        if($itemid != "" && $batchnumberarray != ""){
+            // Get data main form no    
+            $sql = $this->db->query("SELECT fam_formno FROM farrel_main WHERE fam_productcode LIKE '%$itemid%' AND fam_batchnumber IN ('" . implode("','", $batchnumberarray) . "')");
+            $formnoarray = [];
+            foreach($sql->result() as $rs){
+                array_push($formnoarray , $rs->fam_formno);
+            }
+
+            //saveMaimFromno
+
+            return $formnoarray;
+        }
+    }
+    private function getRunscreenByMainformno($mainformno)
+    {
+        if($mainformno != ""){
+            $ecode = getUser()->ecode;
+            $sql = $this->db->query("SELECT 
+            far_runscreen_name 
+            FROM farrel_detail 
+            WHERE far_main_formno IN ('" . implode("','", $mainformno) . "') 
+            GROUP BY far_runscreen_name");
+
+            $sql2 = $this->db->query("SELECT
+            gprun_runscreen_name
+            FROM msd_runscreen_graph WHERE gprun_ecode = '$ecode'
+            ");
+
+            $runscreenAr = [];
+            if($sql2->num_rows() != 0){
+                if($sql2->row()->gprun_runscreen_name !== null){
+                    $runscreenAr = json_decode($sql2->row()->gprun_runscreen_name);
+                }
+            }
+            
+            $html = '';
+            $checked = '';
+            if($sql->num_rows() != 0){
+                foreach($sql->result() as $rs){
+
+                    if($sql2->row()->gprun_runscreen_name !== null){
+                        if(in_array($rs->far_runscreen_name , $runscreenAr)){
+                            $checked = ' checked';
+                        }else{
+                            $checked = '';
+                        }
+                    }
+
+                    $html .='
+                    <div class="col-md-4 col-lg-3 col-sm-6">
+                        <input '.$checked.' class="form-check-input runscreenCheck" type="checkbox" value="" id="runscreenCheck" name="runscreenCheck[]" data_runscreen="'.$rs->far_runscreen_name.'">
+                        <label class="form-check-label" for="runscreenCheck">'.$rs->far_runscreen_name.'</label>
+                    </div>
+                    ';
+                }
+            }
+
+            return $html;
+        }
+    }
+    private function getRunscreenFromTableGraph()
+    {
+        $ecode = getUser()->ecode;
+        $sql = $this->db->query("SELECT
+        gprun_runscreen_name
+        FROM msd_runscreen_graph
+        WHERE gprun_ecode = '$ecode'
+        ");
+        return $sql;
+    }
+
+
+    public function saveFristDataGraphRunscreen()
+    {
+        if($this->input->post("itemid") != ""){
+            $ecode = getUser()->ecode;
+
+            $itemid = $this->input->post("itemid");
+            $batchnumberarray = $this->input->post("batchnumberarray");
+            $mainformnoarray = $this->input->post("mainformnoarray");
+
+            $sql = $this->db->query("SELECT * FROM msd_runscreen_graph WHERE gprun_ecode = '$ecode'
+            ");
+
+            if($sql->num_rows() == 0){
+                $arInsert = array(
+                    "gprun_itemid" => $itemid,
+                    "gprun_batchnumber" => json_encode($batchnumberarray),
+                    "gprun_runscreen_name" => null,
+                    "gprun_mainformno" => json_encode($mainformnoarray),
+                    "gprun_user" => getUser()->Fname." ".getUser()->Lname,
+                    "gprun_ecode" => getUser()->ecode,
+                    "gprun_datetime_access" => date("Y-m-d H:i:s")
+                );
+                $this->db->insert("msd_runscreen_graph" , $arInsert);
+                $output = array(
+                    "msg" => "บันทึกข้อมูลสำเร็จ",
+                    "status" => "Select Data Success"
+                );
+            }else{
+                $arupdate = array(
+                    "gprun_itemid" => $itemid,
+                    "gprun_batchnumber" => json_encode($batchnumberarray),
+                    "gprun_mainformno" => json_encode($mainformnoarray),
+                    "gprun_runscreen_name" => null,
+                    "gprun_datetime_access" => date("Y-m-d H:i:s")
+                );
+                $this->db->where("gprun_ecode" , $ecode);
+                $this->db->update("msd_runscreen_graph" , $arupdate);
+
+                $output = array(
+                    "msg" => "อัพเดตข้อมูลสำเร็จ",
+                    "status" => "Update Data Success",
+                );
+            }
+        }else{
+            $output = array(
+                "msg" => "พบข้อผิดพลาด",
+                "status" => "Error"
+            );
+        }
+
+        echo json_encode($output);
+    }
+
+
+
+
+    public function updateRunscreenChecked()
+    {
+        if($this->input->post("runscreenCheckedArray") != ""){
+            $runscreenCheckArray = $this->input->post("runscreenCheckedArray");
+            $ecode = getUser()->ecode;
+            if($runscreenCheckArray == "0"){
+                $gprun_runscreen_name = null;
+            }else{
+                $gprun_runscreen_name = json_encode($runscreenCheckArray);
+            }
+            $arupdate = array(
+                "gprun_runscreen_name" => $gprun_runscreen_name,
+                "gprun_datetime_access" => date("Y-m-d H:i:s")
+            );
+            $this->db->where("gprun_ecode" , $ecode);
+            $this->db->update("msd_runscreen_graph" , $arupdate);
+
+            $output = array(
+                "msg" => "อัพเดตข้อมูล Runscreen เรียบร้อยแล้ว",
+                "status" => "Update Data Success"
+            );
+        }else{
+            $output = array(
+                "msg" => "อัพเดตข้อมูล Runscreen ไม่สำเร็จ",
+                "status" => "Update Data Not Success",
+                "result" => $this->input->post("runscreenCheckedArray")
+            );
+        }
+        echo json_encode($output);
+    }
+
+
+    public function getDataRunscreenGraphFromdatabase()
+    {
+        $ecode = getUser()->ecode;
+        $sql = $this->db->query("SELECT
+        gprun_itemid,
+        gprun_batchnumber,
+        gprun_mainformno,
+        gprun_runscreen_name
+        FROM msd_runscreen_graph
+        WHERE gprun_ecode = '$ecode'
+        ");
+
+        if($sql->num_rows() != 0){
+            $runscreen = $sql->row()->gprun_runscreen_name;
+            $mainformno = $sql->row()->gprun_mainformno;
+            $itemid = $sql->row()->gprun_itemid;
+            $batchnumber = $sql->row()->gprun_batchnumber;
+
+            $output = array(
+                "msg" => "ดึงข้อมูลจาก Database สำเร็จ",
+                "status" => "Select Data Success",
+                "result_runscreen" => json_decode($runscreen),
+                "result_mainformno" => json_decode($mainformno),
+                "result_itemid" => $itemid,
+                "result_batchnumber" => json_decode($batchnumber),
+            );
+        }else{
+            $output = array(
+                "msg" => "ดึงข้อมูลจาก Database ไม่สำเร็จ",
+                "status" => "Select Data Not Success",
+            );
+        }
+
+        echo json_encode($output);
+
+    }
+
+
+    public function loadAlldataForUseGraphRunscreen()
+    {
+        $ecode = getUser()->ecode;
+        if($ecode != ""){
+            $masterData = $this->getMasterDataRunscreenGraph($ecode);
+
+            $runscreenSelect = [];
+            $mainformnoSelect = [];
+            $itemid = "";
+            foreach($masterData->result() as $rs){
+                $runscreenSelect = json_decode($rs->gprun_runscreen_name);
+                $mainformnoSelect = json_decode($rs->gprun_mainformno);
+                $itemid = $rs->gprun_itemid;
+            }
+
+            if($runscreenSelect !== null){
+                $runscreenResultData = $this->getdataForCreateRunscreenGraph($mainformnoSelect , $runscreenSelect)->result();
+            }else{
+                $runscreenResultData = 0;
+            }
+            
+
+            $output = array(
+                "msg" => "ดึงข้อมูลสำหรับทำ Graph สำเร็จ",
+                "status" => "Select Data Success",
+                "result_runscreen" => $runscreenSelect,
+                "result_mainformno" => $mainformnoSelect,
+                "result_itemid" => $itemid,
+                "result_graph" => $runscreenResultData
+            );
+        }else{
+            $output = array(
+                "msg" => "ดึงข้อมูลสำหรับทำ Graph สำเร็จ",
+                "status" => "Select Data Success",
+            );
+        }
+        echo json_encode($output);
+    }
+    private function getMasterDataRunscreenGraph($ecode)
+    {
+        if($ecode != ""){
+            $sql = $this->db->query("SELECT
+            gprun_itemid,
+            gprun_batchnumber,
+            gprun_mainformno,
+            gprun_runscreen_name
+            FROM msd_runscreen_graph
+            WHERE gprun_ecode = '$ecode'
+            ");
+
+            return $sql;
+        }
+    }
+    private function getdataForCreateRunscreenGraph($mainformno , $runscreenname)
+    {
+        if($mainformno != "" && $runscreenname != ""){
+            $sql = $this->db->query("SELECT
+            far_main_formno,
+            fam_prodid,
+            fam_batchnumber,
+            far_worktime,
+            far_runscreen_name,
+            far_runscreen_value,
+            far_runscreen_min,
+            far_runscreen_max,
+            far_datetime
+            FROM farrel_detail 
+            INNER JOIN farrel_main ON far_main_formno = fam_formno
+            WHERE far_main_formno IN ('" . implode("','", $mainformno) . "') AND far_action != 'spoint' AND far_runscreen_name IN ('" . implode("','", $runscreenname) . "')  ORDER BY far_datetime ASC , far_runscreen_name ASC");
+            return $sql;
+        }
+    }
+
 
     
 

@@ -1083,6 +1083,13 @@ table>#runscreenManage, td, th {
     -webkit-overflow-scrolling: touch;
 }
 
+.searchItemid_runscreen_ul{
+	max-height: 200px;
+    margin-bottom: 10px;
+    overflow:scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
 .clearDiv{
 	position: relative;
 }
@@ -1102,6 +1109,25 @@ table>#runscreenManage, td, th {
 	transform:scale(1.1);
 }
 
+.clearDiv_runscreen{
+	position: relative;
+}
+.clearDivIcon_runscreen{
+	position:absolute;
+	top:5px;
+	right:20px;
+	font-size:18px;
+	font-weight: 600;
+	color:#fdb71f;
+	transition: transform .2s;
+	
+}
+.clearDivIcon_runscreen:hover{
+	cursor:pointer;
+	color:#d89400;
+	transform:scale(1.1);
+}
+
 .showLotNumber_li{
 	position:relative;
 }
@@ -1109,6 +1135,21 @@ table>#runscreenManage, td, th {
 	padding-left:30px;
 }
 .showLotNumber_checkbox{
+	position:absolute;
+	left:15px;
+	top:14px;
+	z-index: 9;
+	width:18px;
+	height:18px;
+}
+
+.showLotNumber_runscreen_li{
+	position:relative;
+}
+.showLotNumber_runscreen_li>span{
+	padding-left:30px;
+}
+.showLotNumber_runscreen_checkbox{
 	position:absolute;
 	left:15px;
 	top:14px;

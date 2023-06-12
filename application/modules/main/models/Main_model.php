@@ -3685,6 +3685,7 @@ class Main_model extends CI_Model
                         $rsStandardValue = "";
                         $rsLowerLimit = "";
                         $rsUpperLimit = "";
+
                         if(floatval($rs->StandardValue) <= 0.0000){
                             $rsStandardValue = "";
                         }else{
