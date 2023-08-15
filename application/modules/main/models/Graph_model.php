@@ -378,7 +378,7 @@ class Graph_model extends CI_Model {
         if($this->input->post("itemid") != ""){
             $itemid = $this->input->post("itemid");
             $sql = $this->db->query("SELECT 
-            fam_batchnumber , fam_formno FROM farrel_main 
+            fam_batchnumber , fam_formno , fam_machine , fam_machinename FROM farrel_main 
             WHERE fam_productcode LIKE '%$itemid%' GROUP BY fam_batchnumber ORDER BY fam_batchnumber DESC");
 
             $output = array(

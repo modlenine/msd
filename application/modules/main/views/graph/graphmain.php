@@ -481,7 +481,6 @@
                 $('.loader').fadeIn(1000);
             },
             success:function(res){
-                console.log(JSON.parse(res));
                 if(JSON.parse(res).status == "Found data on Database"){
                     loadCheckGraphByCheckLotNum();
                     loadAlldataForUseGraph();

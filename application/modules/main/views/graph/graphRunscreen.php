@@ -187,7 +187,7 @@
                                         data_ItemId="`+itemid+`"
                                         data_index="`+i+`"
                                     >
-                                    <span>`+result[i].fam_batchnumber+`</span><br>
+                                    <span>`+result[i].fam_batchnumber+` <b>Machine: </b>`+result[i].fam_machine+` <b>Template: </b>`+result[i].fam_machinename+`</span><br>
                                 </li>
                             </a>
                             `;
