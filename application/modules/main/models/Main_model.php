@@ -1624,10 +1624,16 @@ class Main_model extends CI_Model
             ORDER BY
             farrel_detail.far_runscreen_group_linenum ASC");
 
-            $output = '
-            <option value="">กรุณาเลือกช่วงเวลา</option>
-            <option value="spoint">S/POINT</option>
-            ';
+            if(getUser()->posi == "15"){
+                $output = '
+                <option value="">กรุณาเลือกช่วงเวลา</option>
+                ';
+            }else{
+                $output = '
+                <option value="">กรุณาเลือกช่วงเวลา</option>
+                <option value="spoint">S/POINT</option>
+                ';
+            }
 
             foreach ($sql->result() as $rs) {
                 $output .= '

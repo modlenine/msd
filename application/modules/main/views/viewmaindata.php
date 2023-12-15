@@ -363,12 +363,12 @@
             $('.conViewpage').removeClass('px-5');
         }
 
-        console.log(userPosi);
-        if(userPosi == "15"){
-            $('#btn_saveEditRunForm').css('display' , 'none');
-        }else{
-            $('#btn_saveEditRunForm').css('display' , '');
-        }
+        // console.log(userPosi);
+        // if(userPosi == "15"){
+        //     $('#btn_saveEditRunForm').css('display' , 'none');
+        // }else{
+        //     $('#btn_saveEditRunForm').css('display' , '');
+        // }
 
         let mainformno = $('#view_loadMainData').val();
         loadSubmainData2(mainformno);
