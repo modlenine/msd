@@ -357,9 +357,17 @@
 </html>
 <script>
     let testIDShowArray = [];
+    let userPosi = "<?php echo getUser()->posi; ?>";
     $(document).ready(function() {
         if($(window).width() < 480){
             $('.conViewpage').removeClass('px-5');
+        }
+
+        console.log(userPosi);
+        if(userPosi == "15"){
+            $('#btn_saveEditRunForm').css('display' , 'none');
+        }else{
+            $('#btn_saveEditRunForm').css('display' , '');
         }
 
         let mainformno = $('#view_loadMainData').val();
